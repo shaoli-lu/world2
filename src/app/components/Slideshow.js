@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 
 // Helper: get Chinese name
 function getChineseName(country) {
@@ -25,6 +25,14 @@ function capitalize(str) {
   return str && str[0] ? str[0].toUpperCase() + str.slice(1) : "";
 }
 
+function formatGDP(value) {
+  if (value == null) return null;
+  if (value >= 1e12) return `$${(value / 1e12).toFixed(2)}T`;
+  if (value >= 1e9) return `$${(value / 1e9).toFixed(1)}B`;
+  if (value >= 1e6) return `$${(value / 1e6).toFixed(1)}M`;
+  return `$${value.toLocaleString("en-US")}`;
+}
+
 export default function Slideshow({ countries }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -34,22 +42,25 @@ export default function Slideshow({ countries }) {
   const SLIDE_DURATION = 5000; // 5 seconds per slide
   const PROGRESS_INTERVAL = 50; // update every 50ms
 
-  // Pick a random starting country on mount
-  useEffect(() => {
-    if (countries.length > 0) {
-      setCurrentIndex(Math.floor(Math.random() * countries.length));
-    }
+  // Sort countries by GDP descending (countries without GDP go to the end)
+  const sortedCountries = useMemo(() => {
+    return [...countries].sort((a, b) => (b._gdp || 0) - (a._gdp || 0));
   }, [countries]);
 
+  // Reset index when countries change
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [sortedCountries]);
+
   const nextSlide = useCallback(() => {
-    if (countries.length === 0) return;
-    setCurrentIndex(Math.floor(Math.random() * countries.length));
+    if (sortedCountries.length === 0) return;
+    setCurrentIndex((prev) => (prev + 1) % sortedCountries.length);
     setProgress(0);
-  }, [countries]);
+  }, [sortedCountries]);
 
   // Auto-advance
   useEffect(() => {
-    if (isPaused || countries.length === 0) {
+    if (isPaused || sortedCountries.length === 0) {
       clearInterval(intervalRef.current);
       clearInterval(progressRef.current);
       return;
@@ -65,7 +76,7 @@ export default function Slideshow({ countries }) {
       clearInterval(intervalRef.current);
       clearInterval(progressRef.current);
     };
-  }, [isPaused, currentIndex, countries, nextSlide]);
+  }, [isPaused, currentIndex, sortedCountries, nextSlide]);
 
   const togglePause = (e) => {
     e.stopPropagation();
@@ -81,7 +92,7 @@ export default function Slideshow({ countries }) {
     );
   }
 
-  const country = countries[currentIndex];
+  const country = sortedCountries[currentIndex];
   if (!country) return null;
 
   const chineseName = getChineseName(country);
@@ -90,6 +101,8 @@ export default function Slideshow({ countries }) {
   const areaStr = country.area ? country.area.toLocaleString("en-US") : "N/A";
   const carSide =
     country.car && country.car.side ? capitalize(country.car.side) : "N/A";
+  const gdpStr = formatGDP(country._gdp);
+  const gdpYear = country._gdpYear;
 
   return (
     <div className="slideshow-container">
@@ -134,6 +147,12 @@ export default function Slideshow({ countries }) {
             <span className="slideshow-info-label">🚗 Car Side</span>
             <span className="slideshow-info-value">{carSide}</span>
           </div>
+          {gdpStr && (
+            <div className="slideshow-info-item slideshow-gdp">
+              <span className="slideshow-info-label">💰 GDP ({gdpYear})</span>
+              <span className="slideshow-info-value">{gdpStr}</span>
+            </div>
+          )}
         </div>
 
         <div className="slideshow-progress">
@@ -144,6 +163,7 @@ export default function Slideshow({ countries }) {
         </div>
 
         <div className="slideshow-status-bar">
+          <span className="slideshow-rank">#{currentIndex + 1} / {sortedCountries.length}</span>
           <div className={`pulse-dot ${isPaused ? "paused" : ""}`} />
           <span className={`slideshow-status ${isPaused ? "paused" : "playing"}`}>
             {isPaused ? "Paused — Click to resume" : "Playing — Click to pause"}

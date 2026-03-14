@@ -24,6 +24,14 @@ function capitalize(str) {
   return str && str[0] ? str[0].toUpperCase() + str.slice(1) : "";
 }
 
+function formatGDP(value) {
+  if (value == null) return null;
+  if (value >= 1e12) return `$${(value / 1e12).toFixed(2)}T`;
+  if (value >= 1e9) return `$${(value / 1e9).toFixed(1)}B`;
+  if (value >= 1e6) return `$${(value / 1e6).toFixed(1)}M`;
+  return `$${value.toLocaleString("en-US")}`;
+}
+
 // Highlight matching text
 function HighlightText({ text, searchTerm }) {
   if (!searchTerm || !text) return <>{text}</>;
@@ -109,6 +117,12 @@ export default function CountryList({ countries, sortField, searchTerm }) {
           country.car && country.car.side
             ? capitalize(country.car.side)
             : "N/A";
+        const gdpStr = formatGDP(country._gdp);
+        const gdpYear = country._gdpYear;
+        const gdpPcStr = country._gdpPerCapita
+          ? `$${Math.round(country._gdpPerCapita).toLocaleString("en-US")}`
+          : null;
+        const gdpPcYear = country._gdpPerCapitaYear;
 
         return (
           <div
@@ -158,6 +172,20 @@ export default function CountryList({ countries, sortField, searchTerm }) {
                   <span className="card-detail-icon">🚗</span>
                   {carSide}
                 </span>
+                {gdpStr && (
+                  <span className="card-detail card-gdp">
+                    <span className="card-detail-icon">💰</span>
+                    {gdpStr}
+                    <span className="card-gdp-year">({gdpYear})</span>
+                  </span>
+                )}
+                {gdpPcStr && (
+                  <span className="card-detail card-gdp-pc">
+                    <span className="card-detail-icon">👤</span>
+                    {gdpPcStr}/capita
+                    <span className="card-gdp-year">({gdpPcYear})</span>
+                  </span>
+                )}
               </div>
             </div>
           </div>

@@ -678,3 +678,32 @@ body {
   border-radius: 2px;
   padding: 0 1px;
 }
+
+/* ========== GDP STYLES ========== */
+.card-gdp {
+  color: var(--accent-teal) !important;
+  font-weight: 600;
+}
+
+.card-gdp-year {
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  margin-left: 0.15rem;
+  font-weight: 400;
+}
+
+.slideshow-gdp .slideshow-info-value {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+.slideshow-rank {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-family: var(--font-primary);
+  letter-spacing: 0.5px;
+}

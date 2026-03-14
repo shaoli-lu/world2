@@ -6,7 +6,7 @@ import CountryList from "./components/CountryList";
 import ConfettiEffect from "./components/ConfettiEffect";
 
 const TABS = [
-  { id: "slideshow", label: "Slideshow", emoji: "🎴" },
+  { id: "slideshow", label: "GDP Slideshow", emoji: "💰" },
   { id: "population", label: "Population", emoji: "👥" },
   { id: "area", label: "Land", emoji: "🗺" },
   { id: "name", label: "Name", emoji: "🔤" },
@@ -19,23 +19,75 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
 
   // Fetch countries from REST Countries API
+  // Generic World Bank indicator fetcher (returns map: ISO3 -> { value, year })
+  const fetchIndicator = useCallback(async (indicatorCode) => {
+    const map = {};
+    try {
+      const baseUrl =
+        `https://api.worldbank.org/v2/country/all/indicator/${indicatorCode}?format=json&date=2020:2023&per_page=300`;
+      const firstRes = await fetch(baseUrl);
+      if (!firstRes.ok) return map;
+      const firstJson = await firstRes.json();
+      const totalPages = firstJson[0].pages || 1;
+      const allRecords = [...(firstJson[1] || [])];
+
+      if (totalPages > 1) {
+        const fetches = [];
+        for (let p = 2; p <= totalPages; p++) {
+          fetches.push(
+            fetch(`${baseUrl}&page=${p}`)
+              .then((r) => r.json())
+              .then((json) => json[1] || [])
+              .catch(() => [])
+          );
+        }
+        const results = await Promise.all(fetches);
+        results.forEach((records) => allRecords.push(...records));
+      }
+
+      for (const rec of allRecords) {
+        const code = rec.countryiso3code;
+        if (!code || rec.value == null) continue;
+        const year = parseInt(rec.date, 10);
+        if (!map[code] || year > map[code].year) {
+          map[code] = { value: rec.value, year };
+        }
+      }
+    } catch (error) {
+      console.error(`Failed to fetch ${indicatorCode}:`, error);
+    }
+    return map;
+  }, []);
+
   const fetchCountries = useCallback(async () => {
     try {
       setIsLoading(true);
-      const fields = "name,translations,capital,population,area,car,flags";
-      const response = await fetch(
-        `https://restcountries.com/v3.1/all?fields=${fields}`
-      );
+      const fields = "name,translations,capital,population,area,car,flags,cca3";
+      const [response, gdpMap, gdpPcMap] = await Promise.all([
+        fetch(`https://restcountries.com/v3.1/all?fields=${fields}`),
+        fetchIndicator("NY.GDP.MKTP.CD"),       // GDP (current US$)
+        fetchIndicator("NY.GDP.PCAP.CD"),        // GDP per capita (current US$)
+      ]);
       if (response.ok) {
         const data = await response.json();
-        setCountries(data);
+        // Merge World Bank data into each country
+        const enriched = data.map((c) => {
+          const gdp = gdpMap[c.cca3];
+          const gdpPc = gdpPcMap[c.cca3];
+          return {
+            ...c,
+            ...(gdp ? { _gdp: gdp.value, _gdpYear: gdp.year } : {}),
+            ...(gdpPc ? { _gdpPerCapita: gdpPc.value, _gdpPerCapitaYear: gdpPc.year } : {}),
+          };
+        });
+        setCountries(enriched);
       }
     } catch (error) {
       console.error("Failed to fetch countries:", error);
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [fetchIndicator]);
 
   useEffect(() => {
     fetchCountries();
