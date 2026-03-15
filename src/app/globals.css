@@ -530,6 +530,13 @@ body {
   opacity: 0.7;
 }
 
+.card-detail-label {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
 .card-capital {
   font-size: 0.72rem;
   color: var(--text-muted);

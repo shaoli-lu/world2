@@ -100,7 +100,11 @@ export default function Slideshow({ countries }) {
   const populationStr = (country.population || 0).toLocaleString("en-US");
   const areaStr = country.area ? country.area.toLocaleString("en-US") : "N/A";
   const carSide =
-    country.car && country.car.side ? capitalize(country.car.side) : "N/A";
+    country.car && country.car.side
+      ? country.car.side === "left"
+        ? "Left 左"
+        : "Right 右"
+      : "N/A";
   const gdpStr = formatGDP(country._gdp);
   const gdpYear = country._gdpYear;
   const gdpPcStr = (country._gdpPerCapita || 0).toFixed(0).toLocaleString("en-US")
@@ -134,31 +138,31 @@ export default function Slideshow({ countries }) {
 
         <div className="slideshow-info">
           <div className="slideshow-info-item">
-            <span className="slideshow-info-label">🏛 Capital</span>
+            <span className="slideshow-info-label">🏛 Capital 首都</span>
             <span className="slideshow-info-value">{capitalStr}</span>
           </div>
           <div className="slideshow-info-item">
-            <span className="slideshow-info-label">👥 Population</span>
+            <span className="slideshow-info-label">👥 Population 人口</span>
             <span className="slideshow-info-value">{populationStr}</span>
           </div>
           <div className="slideshow-info-item">
-            <span className="slideshow-info-label">🗺 Area (sq km)</span>
+            <span className="slideshow-info-label">🗺 Area 面积 (sq km)</span>
             <span className="slideshow-info-value">{areaStr}</span>
           </div>
           <div className="slideshow-info-item">
-            <span className="slideshow-info-label">🚗 Car Side</span>
+            <span className="slideshow-info-label">🚗 Car Side 驾驶侧</span>
             <span className="slideshow-info-value">{carSide}</span>
           </div>
           {gdpStr && (
             <div className="slideshow-info-item slideshow-gdp">
-              <span className="slideshow-info-label">💰 GDP ({gdpYear})</span>
+              <span className="slideshow-info-label">💰 GDP ({gdpYear}) 国内生产总值</span>
               <span className="slideshow-info-value">{gdpStr}</span>
             </div>
           )}
           {gdpPcStr && (
             <span className="card-detail card-gdp-pc">
               <span className="card-detail-icon">👤</span>
-              {gdpPcStr}/capita
+              {gdpPcStr}/capita 人均
               <span className="card-gdp-year">({gdpPcYear})</span>
             </span>
           )}
@@ -175,7 +179,7 @@ export default function Slideshow({ countries }) {
           <span className="slideshow-rank">#{currentIndex + 1} / {sortedCountries.length}</span>
           <div className={`pulse-dot ${isPaused ? "paused" : ""}`} />
           <span className={`slideshow-status ${isPaused ? "paused" : "playing"}`}>
-            {isPaused ? "Paused — Click to resume" : "Playing — Click to pause"}
+            {isPaused ? "Paused — Click to resume 已暂停 — 点击恢复" : "Playing — Click to pause 正在播放 — 点击暂停"}
           </span>
         </div>
       </div>

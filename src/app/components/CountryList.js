@@ -115,7 +115,9 @@ export default function CountryList({ countries, sortField, searchTerm }) {
           : "N/A";
         const carSide =
           country.car && country.car.side
-            ? capitalize(country.car.side)
+            ? country.car.side === "left"
+              ? "Left 左"
+              : "Right 右"
             : "N/A";
         const gdpStr = formatGDP(country._gdp);
         const gdpYear = country._gdpYear;
@@ -158,23 +160,27 @@ export default function CountryList({ countries, sortField, searchTerm }) {
                   />
                 </span>
               </div>
-              <div className="card-capital">🏛 {capitalStr}</div>
+              <div className="card-capital">🏛 Capital 首都: {capitalStr}</div>
               <div className="card-details">
                 <span className="card-detail">
                   <span className="card-detail-icon">👥</span>
+                  <span className="card-detail-label">Pop 人口:</span>
                   {populationStr}
                 </span>
                 <span className="card-detail">
                   <span className="card-detail-icon">🗺</span>
+                  <span className="card-detail-label">Area 面积:</span>
                   {areaStr} km²
                 </span>
                 <span className="card-detail">
                   <span className="card-detail-icon">🚗</span>
+                  <span className="card-detail-label">Side 侧:</span>
                   {carSide}
                 </span>
                 {gdpStr && (
                   <span className="card-detail card-gdp">
                     <span className="card-detail-icon">💰</span>
+                    <span className="card-detail-label">GDP 国内生产总值:</span>
                     {gdpStr}
                     <span className="card-gdp-year">({gdpYear})</span>
                   </span>
