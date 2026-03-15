@@ -38,7 +38,7 @@ export default function ConfettiEffect() {
         ticks: 120,
         gravity: 0.8,
         scalar: 0.9,
-        shapes: ["circle", "square"],
+        shapes: ["star", "square"],
         drift: 0,
       });
     };
