@@ -119,16 +119,18 @@ export default function Home() {
           </div>
 
           <div className="search-container">
-            <span className="search-icon">🔍</span>
-            <input
-              id="search-input"
-              className="search-input"
-              type="text"
-              placeholder="Search... 搜索..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              autoComplete="off"
-            />
+            <div className="search-input-wrapper">
+              <span className="search-icon">🔍</span>
+              <input
+                id="search-input"
+                className="search-input"
+                type="text"
+                placeholder="Search... 搜索..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                autoComplete="off"
+              />
+            </div>
             {countryCount > 0 && (
               <div className="country-count">
                 {countryCount} countries loaded 已加载国家
