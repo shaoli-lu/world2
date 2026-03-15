@@ -22,9 +22,9 @@ export default function ConfettiEffect() {
 
       // Spray confetti from click position
       myConfetti({
-        particleCount: 80,
-        spread: 70,
-        startVelocity: 30,
+        particleCount: 200,
+        spread: 80,
+        startVelocity: 60,
         origin: { x, y },
         colors: [
           "#3b82f6",
@@ -38,7 +38,7 @@ export default function ConfettiEffect() {
         ticks: 120,
         gravity: 0.8,
         scalar: 0.9,
-        shapes: ["star", "square"],
+        shapes: ["star", "square", "circle", "triangle", "polygon", "heart", "diamond"],
         drift: 0,
       });
     };
