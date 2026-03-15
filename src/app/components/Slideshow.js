@@ -103,6 +103,8 @@ export default function Slideshow({ countries }) {
     country.car && country.car.side ? capitalize(country.car.side) : "N/A";
   const gdpStr = formatGDP(country._gdp);
   const gdpYear = country._gdpYear;
+  const gdpPcStr = (country._gdpPerCapita || 0).toFixed(0).toLocaleString("en-US")
+  const gdpPcYear = country._gdpPerCapitaYear
 
   return (
     <div className="slideshow-container">
@@ -152,6 +154,13 @@ export default function Slideshow({ countries }) {
               <span className="slideshow-info-label">💰 GDP ({gdpYear})</span>
               <span className="slideshow-info-value">{gdpStr}</span>
             </div>
+          )}
+          {gdpPcStr && (
+            <span className="card-detail card-gdp-pc">
+              <span className="card-detail-icon">👤</span>
+              {gdpPcStr}/capita
+              <span className="card-gdp-year">({gdpPcYear})</span>
+            </span>
           )}
         </div>
 
