@@ -39,7 +39,7 @@ export default function Slideshow({ countries }) {
   const [progress, setProgress] = useState(0);
   const intervalRef = useRef(null);
   const progressRef = useRef(null);
-  const SLIDE_DURATION = 5000; // 5 seconds per slide
+  const SLIDE_DURATION = 8000; // 8 seconds per slide
   const PROGRESS_INTERVAL = 50; // update every 50ms
 
   // Sort countries by GDP descending (countries without GDP go to the end)
