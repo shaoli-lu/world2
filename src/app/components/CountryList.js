@@ -85,7 +85,7 @@ export default function CountryList({ countries, sortField, searchTerm }) {
     return (
       <div className="loading-container">
         <div className="loading-globe"></div>
-        <div className="loading-text">Loading countries…</div>
+        <div className="loading-text">Loading countries… 加载国家中...</div>
       </div>
     );
   }
@@ -94,9 +94,9 @@ export default function CountryList({ countries, sortField, searchTerm }) {
     return (
       <div className="empty-state">
         <div className="empty-icon">🔍</div>
-        <div className="empty-title">No countries found</div>
+        <div className="empty-title">No countries found 未找到相关国家</div>
         <div className="empty-subtitle">
-          Try a different search term
+          Try a different search term 请尝试不同的搜索词
         </div>
       </div>
     );
@@ -182,7 +182,7 @@ export default function CountryList({ countries, sortField, searchTerm }) {
                 {gdpPcStr && (
                   <span className="card-detail card-gdp-pc">
                     <span className="card-detail-icon">👤</span>
-                    {gdpPcStr}/capita
+                    {gdpPcStr}/capita 人均
                     <span className="card-gdp-year">({gdpPcYear})</span>
                   </span>
                 )}

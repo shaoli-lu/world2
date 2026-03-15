@@ -6,10 +6,10 @@ import CountryList from "./components/CountryList";
 import ConfettiEffect from "./components/ConfettiEffect";
 
 const TABS = [
-  { id: "slideshow", label: "GDP Slideshow", emoji: "💰" },
-  { id: "population", label: "Population", emoji: "👥" },
-  { id: "area", label: "Land", emoji: "🗺" },
-  { id: "name", label: "Name", emoji: "🔤" },
+  { id: "slideshow", label: "GDP Slideshow 幻灯片", emoji: "💰" },
+  { id: "population", label: "Population 人口", emoji: "👥" },
+  { id: "area", label: "Land 面积", emoji: "🗺" },
+  { id: "name", label: "Name 名称", emoji: "🔤" },
 ];
 
 export default function Home() {
@@ -113,8 +113,8 @@ export default function Home() {
           <div className="logo-area">
             <img src="/logo.png" alt="The World Logo" className="logo-img" />
             <div>
-              <div className="logo-text">THE WORLD</div>
-              <div className="logo-subtitle">Explore Every Nation</div>
+              <div className="logo-text">THE WORLD 世界</div>
+              <div className="logo-subtitle">Explore Every Nation 探索每个国家</div>
             </div>
           </div>
 
@@ -124,14 +124,14 @@ export default function Home() {
               id="search-input"
               className="search-input"
               type="text"
-              placeholder="Search countries..."
+              placeholder="Search... 搜索..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               autoComplete="off"
             />
             {countryCount > 0 && (
               <div className="country-count">
-                {countryCount} countries loaded
+                {countryCount} countries loaded 已加载国家
               </div>
             )}
           </div>
@@ -162,7 +162,7 @@ export default function Home() {
         {isLoading ? (
           <div className="loading-container">
             <div className="loading-globe"></div>
-            <div className="loading-text">Discovering the world…</div>
+            <div className="loading-text">Discovering the world… 探索世界...</div>
           </div>
         ) : activeTab === "slideshow" ? (
           <Slideshow countries={countries} />
