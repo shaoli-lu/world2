@@ -10,6 +10,7 @@ const TABS = [
   { id: "population", label: "Population 人口", emoji: "👥" },
   { id: "area", label: "Land 面积", emoji: "🗺" },
   { id: "name", label: "Name 名称", emoji: "🔤" },
+  { id: "perCapita", label: "Capita 人均", emoji: "👤" },
 ];
 
 export default function Home() {
@@ -98,6 +99,7 @@ export default function Home() {
     if (tabId === "population") return "▼";
     if (tabId === "area") return "▼";
     if (tabId === "name") return "▲";
+    if (tabId === "perCapita") return "▼";
     return "";
   };
 

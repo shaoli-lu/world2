@@ -60,6 +60,8 @@ export default function CountryList({ countries, sortField, searchTerm }) {
         return (b.area || 0) - (a.area || 0);
       } else if (sortField === "name") {
         return (a.name.common || "").localeCompare(b.name.common || "");
+      } else if (sortField === "perCapita") {
+        return (b._gdpPerCapita || 0) - (a._gdpPerCapita || 0);
       }
       return 0;
     });
