@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import Slideshow from "./components/Slideshow";
 import CountryList from "./components/CountryList";
 import ConfettiEffect from "./components/ConfettiEffect";
+import HelpModal from "./components/HelpModal";
 
 const TABS = [
   { id: "slideshow", label: "GDP Slideshow 幻灯片", emoji: "💰" },
@@ -18,6 +19,7 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState("slideshow");
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [isHelpOpen, setIsHelpOpen] = useState(false);
 
   // Fetch countries from REST Countries API
   // Generic World Bank indicator fetcher (returns map: ISO3 -> { value, year })
@@ -108,6 +110,7 @@ export default function Home() {
   return (
     <>
       <ConfettiEffect />
+      <HelpModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
 
       {/* HEADER */}
       <header className="header">
@@ -139,6 +142,11 @@ export default function Home() {
               </div>
             )}
           </div>
+
+          <button className="help-btn" onClick={() => setIsHelpOpen(true)}>
+            <span className="help-emoji">📘</span>
+            <span>Help</span>
+          </button>
         </div>
       </header>
 
