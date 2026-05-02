@@ -114,7 +114,14 @@ export default function Slideshow({ countries }) {
     <div className="slideshow-container">
       <div className="slideshow-card" onClick={togglePause}>
         <div className="slideshow-flag-wrapper">
-          {country.flags && country.flags.svg ? (
+          {country.flags && country.flags.svgDataUri ? (
+            <img
+              className="slideshow-flag"
+              src={country.flags.svgDataUri}
+              alt={`Flag of ${country.name.common}`}
+              loading="eager"
+            />
+          ) : country.flags && country.flags.svg ? (
             <img
               className="slideshow-flag"
               src={country.flags.svg}

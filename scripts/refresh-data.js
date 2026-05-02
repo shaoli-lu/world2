@@ -86,6 +86,28 @@ const refreshData = async () => {
       };
     });
 
+    console.log("Downloading and embedding SVGs as Base64...");
+    const batchSize = 20;
+    for (let i = 0; i < enriched.length; i += batchSize) {
+      const batch = enriched.slice(i, i + batchSize);
+      await Promise.all(batch.map(async (c) => {
+        if (c.flags && c.flags.svg) {
+          try {
+            const res = await fetch(c.flags.svg);
+            if (res.ok) {
+              const svgText = await res.text();
+              const base64 = Buffer.from(svgText).toString('base64');
+              c.flags.svgDataUri = `data:image/svg+xml;base64,${base64}`;
+            } else {
+              console.warn(`Failed to fetch SVG for ${c.name?.common || c.cca3}: ${res.status}`);
+            }
+          } catch (err) {
+            console.warn(`Error fetching SVG for ${c.name?.common || c.cca3}: ${err.message}`);
+          }
+        }
+      }));
+    }
+
     const dataDir = path.join(__dirname, '..', 'public', 'data');
     if (!fs.existsSync(dataDir)) {
       fs.mkdirSync(dataDir, { recursive: true });

@@ -138,10 +138,10 @@ export default function CountryList({ countries, sortField, searchTerm }) {
               {country._rank}
             </div>
             <div className="card-flag-wrapper">
-              {country.flags && (country.flags.svg || country.flags.png) && (
+              {country.flags && (country.flags.svgDataUri || country.flags.svg || country.flags.png) && (
                 <img
                   className="card-flag"
-                  src={country.flags.svg || country.flags.png}
+                  src={country.flags.svgDataUri || country.flags.svg || country.flags.png}
                   alt={`Flag of ${country.name.common}`}
                   loading="lazy"
                 />
