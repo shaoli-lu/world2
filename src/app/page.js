@@ -8,10 +8,10 @@ import HelpModal from "./components/HelpModal";
 
 const TABS = [
   { id: "slideshow", label: "GDP Slideshow 幻灯片", emoji: "💰" },
+  { id: "perCapita", label: "Per Capita GDP 人均", emoji: "👤" },
   { id: "population", label: "Population 人口", emoji: "👥" },
   { id: "area", label: "Land 面积", emoji: "🗺" },
   { id: "name", label: "Name 名称", emoji: "🔤" },
-  { id: "perCapita", label: "Capita 人均", emoji: "👤" },
 ];
 
 export default function Home() {
